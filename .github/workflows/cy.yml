@@ -50,29 +50,38 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Download Allure results
-        uses: actions/download-artifact@v4
+      # 1) Скачать прошлую историю, если она есть
+      - name: Download Allure history
+        uses: actions/download-artifact@v3
         with:
-          name: allure-results
-          path: ./allure-results
+          name: allure-history
+          path: ./allure-results/history || true  # если артефакта ещё нет, пропустить
 
-      - name: Install JDK and Allure CLI
+      # 2) Установить JDK и Allure-CLI
+      - name: Install Allure CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y default-jdk
+          sudo apt-get update && sudo apt-get install -y default-jdk
           curl -sL https://github.com/allure-framework/allure2/releases/download/2.20.1/allure-2.20.1.tgz \
             | sudo tar zx -C /usr/local
           sudo ln -sf /usr/local/allure-2.20.1/bin/allure /usr/local/bin/allure
 
+      # 3) Генерировать отчёт, НЕ очищая старую папку
       - name: Generate Allure HTML report
         run: |
-          allure generate allure-results -o allure-report
+          allure generate allure-results -o allure-report --clean=false
 
-      - name: Publish Allure report artifact
+      # 4) Выкладывать и результаты, и обновлённую историю
+      - name: Archive Allure report
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: ./allure-report
+
+      - name: Archive Allure history
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-history
+          path: ./allure-report/history
 
   deploy:
     needs: report
