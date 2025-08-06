@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Убедиться, что запрос к JSONPlaceholder возвращает статус 200 и валидные поля","209","Проверка GET /posts/100","","Wed Aug 06 16:43:10 GMT+05:00 2025","passed","Wed Aug 06 16:43:10 GMT+05:00 2025","","test_api","",""
+"","0","test_inc","","Wed Aug 06 16:43:10 GMT+05:00 2025","passed","Wed Aug 06 16:43:10 GMT+05:00 2025","","test_sample","",""
+"Убедиться, что запрос к JSONPlaceholder возвращает статус 200 и валидные поля","199","Проверка GET /posts/50","","Wed Aug 06 16:43:09 GMT+05:00 2025","passed","Wed Aug 06 16:43:10 GMT+05:00 2025","","test_api","",""
+"Убедиться, что запрос к JSONPlaceholder возвращает статус 200 и валидные поля","332","Проверка GET /posts/1","","Wed Aug 06 16:43:09 GMT+05:00 2025","passed","Wed Aug 06 16:43:09 GMT+05:00 2025","","test_api","",""
