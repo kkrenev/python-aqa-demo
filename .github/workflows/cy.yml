@@ -47,7 +47,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y default-jdk
           curl -sL https://github.com/allure-framework/allure2/releases/download/2.20.1/allure-2.20.1.tgz \
-            | tar zx -C /usr/local && ln -s /usr/local/allure-2.20.1/bin/allure /usr/local/bin/allure
+            | sudo tar zx -C /usr/local
+          sudo ln -sf /usr/local/allure-2.20.1/bin/allure /usr/local/bin/allure
 
       - name: Generate Allure HTML report
         run: |
@@ -67,7 +68,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Allure HTML report
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: allure-report
 
