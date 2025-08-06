@@ -37,7 +37,7 @@ jobs:
           echo "Environment=staging" >> allure-results/environment.properties
           echo "Browser=chrome"    >> allure-results/environment.properties
 
-      - name: Debug: list raw results
+      - name: list raw results
         run: ls -R allure-results
 
       - name: Archive Allure results
