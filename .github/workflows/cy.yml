@@ -50,38 +50,49 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      # 1) Скачать прошлую историю, если она есть
+      # 1) Попытка скачать историю (если её нет — пропустить)
       - name: Download Allure history
         uses: actions/download-artifact@v4
         with:
           name: allure-history
-          path: ./allure-results/history || true  # если артефакта ещё нет, пропустить
+          path: ./allure-results/history
+        continue-on-error: true
 
-      # 2) Установить JDK и Allure-CLI
-      - name: Install Allure CLI
+      # 2) Скачать результаты тестов
+      - name: Download Allure results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: ./allure-results
+
+      # 3) Установить JDK и Allure CLI
+      - name: Install JDK and Allure CLI
         run: |
-          sudo apt-get update && sudo apt-get install -y default-jdk
+          sudo apt-get update
+          sudo apt-get install -y default-jdk
           curl -sL https://github.com/allure-framework/allure2/releases/download/2.20.1/allure-2.20.1.tgz \
             | sudo tar zx -C /usr/local
           sudo ln -sf /usr/local/allure-2.20.1/bin/allure /usr/local/bin/allure
 
-      # 3) Генерировать отчёт, НЕ очищая старую папку
+      # 4) Генерировать HTML-отчёт, дописывая историю
       - name: Generate Allure HTML report
         run: |
           allure generate allure-results -o allure-report --clean=false
 
-      # 4) Выкладывать и результаты, и обновлённую историю
-      - name: Archive Allure report
+      # 5) Опубликовать сам отчёт
+      - name: Publish Allure report artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: ./allure-report
 
-      - name: Archive Allure history
+      # 6) Опубликовать обновлённую историю
+      - name: Publish Allure history artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-history
           path: ./allure-report/history
+
 
   deploy:
     needs: report
